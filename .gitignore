@@ -1,0 +1,22 @@
+__pycache__
+image_converter/__pycache__
+
+# migrations folders
+image_converter/migrations
+
+# DS_Store file
+.DS_Store
+image_converter/.DS_Store
+
+# IDE & Environments
+.idea
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+db.sqlite3
+.github
+media
