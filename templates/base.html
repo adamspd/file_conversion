@@ -1,0 +1,139 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="{% static 'root/img/favicon.ico' %}" rel="icon">
+    <title>
+        {% block title %}
+            {% trans "File converter" %}
+        {% endblock %}
+    </title>
+    {% block bootstrapCSS %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+              integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    {% endblock %}
+    {% block menuCSS %}
+        <link rel="stylesheet" href="{% static 'root/css/base.css' %}">
+    {% endblock %}
+</head>
+<body>
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+        <h1 class="logo me-auto"><a href="{% url 'legal:homepage' %}">DAPCO</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="#" class="active">{% trans "Home" %}</a></li>
+                <li class="dropdown">
+                    <a href="#">
+                        <span>{% trans "Convert" %}</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                    <ul>
+                        <li><a href="#">{% trans "PNG to JPG" %}</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#">
+                        <span>{% trans "About" %}</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                    <ul>
+                        <li><a href="#">{% trans "About" %}</a></li>
+                        <li><a href="#">{% trans "Testimonials" %}</a></li>
+
+                        <li class="dropdown"><a href="#"><span>{% trans 'Other projects' %}</span> <i
+                                class="bi bi-chevron-right"></i></a>
+                            <ul>
+                                <li><a href="#">{% trans "Meet & Greet" %}</a></li>
+                                <li><a href="https://crueltouch.com">Crueltouch</a></li>
+                                <li><a href="https://icerd.co">ICERD</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#">{% trans "Services" %}</a></li>
+                <li><a href="https://adamspierredavid.com">{% trans "Portfolio" %}</a></li>
+                <li><a href="https://adamspierredavid.com/blog">{% trans "Blog" %}</a></li>
+
+                <li><a href="#">Contact</a></li>&nbsp;
+                <li>
+                    <div class="languages ml-auto">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ redirect_to }}">
+                            <select name="language" id="languages" onchange="this.form.submit()" class="custom-sel">
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                    <option value="{{ language.code }}"
+                                            {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+                                        {{ language.name_local.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </li>
+                <li>
+                    <button class="getstarted" onClick="changeTheme()">{% trans "Change Theme" %}</button>
+                </li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+    </div>
+</header>
+{% block body %}
+
+{% endblock %}
+{% block jquery %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+{% block bootstrapJS %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
+            integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block customJS %}{% endblock %}
+<script>
+    // on load of the page use jquery to change the theme
+    const theme = localStorage.getItem('theme');
+    $(document).ready(function () {
+        // if not set then set the theme to light
+        if (theme === null) {
+            localStorage.setItem('theme', 'light');
+        } else {
+            if (theme === 'dark') {
+                $('body').addClass('dark-mode');
+            }
+        }
+    });
+
+    function changeTheme() {
+        // save theme in local storage
+        const body = document.querySelector('body');
+        if (localStorage.getItem('theme') === 'dark') {
+            localStorage.setItem('theme', 'light');
+            body.classList.remove('dark-mode');
+        } else {
+            localStorage.setItem('theme', 'dark');
+            body.classList.add('dark-mode');
+        }
+    }
+</script>
+</body>
+</html>
