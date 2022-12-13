@@ -121,6 +121,8 @@
                 $('body').addClass('dark-mode');
             }
         }
+        // set samesite cookie
+        document.cookie = "theme=" + theme + "; SameSite=None; Secure";
     });
 
     function changeTheme() {
